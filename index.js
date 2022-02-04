@@ -78,10 +78,9 @@ app.put('/api/courses/:id', (req, res) => {
 
 
      // validating submission, previously explained in post
-    const schema ={
-        name: Joi.string().min(3).required()
-    };
-    const result = Joi.validate(req.body, schema);
+    
+    const result = validateCourse(req.body); // passing argument req.body input
+    
     if (result.error) // 
     {   res.status(400).send(result.error.details[0].message); 
         return;
@@ -95,6 +94,30 @@ app.put('/api/courses/:id', (req, res) => {
 })
 
 
+// validation function added at bottom, explained in post section
+
+function validateCourse(course){
+    const schema ={
+        name: Joi.string().min(3).required()
+    };
+    return Joi.validate(course, schema); //validating course instead of req. body
+}
+
+
+
+// delete api
+
+app.delete ('/api/courses/:id', (req, res) => {
+    //look for name
+    let course = courses.find(c => c.id === parseInt(req.params.id));
+    if (!course) res.status(404).send('The course with given ID was not found') // explained in put request section
+
+    //doesn't exist, return 404
+
+    //delete
+
+    //return the after result
+})
 
 // setting a port both for Hosting platform and a local 3000 port
 
