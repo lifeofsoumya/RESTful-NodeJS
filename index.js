@@ -60,7 +60,7 @@ app.get('/api/courses/:id', (req, res) => {
     let course = courses.find(c => c.id === parseInt(req.params.id)); 
     // compares if the courses array has the id with the requested id
     
-    if (!course) res.status(404).send('The course with given ID was not found')
+    if (!course) return res.status(404).send('The course with given ID was not found')
     // if previous comparison is not true, return a status of 404 and send response text
 
     res.send(course);
@@ -74,7 +74,10 @@ app.put('/api/courses/:id', (req, res) => {
 
      // looking if id exists, logic explained previously
     let course = courses.find(c => c.id === parseInt(req.params.id));
-    if (!course) res.status(404).send('The course with given ID was not found')
+    if (!course) {
+        res.status(404).send('The course with given ID was not found')
+        return; //if you don't match exit process
+    }
 
 
      // validating submission, previously explained in post
@@ -110,13 +113,16 @@ function validateCourse(course){
 app.delete ('/api/courses/:id', (req, res) => {
     //look for name
     let course = courses.find(c => c.id === parseInt(req.params.id));
-    if (!course) res.status(404).send('The course with given ID was not found') // explained in put request section
+    if (!course) return res.status(404).send('The course with given ID was not found') // explained in put request section
+    //exit if no match found
 
-    //doesn't exist, return 404
 
     //delete
+    const index = courses.indexOf(course);
+    courses.splice(index, 1); // splice changes the contents of an array by removing or replacing existing elements
 
     //return the after result
+    res.send(course);
 })
 
 // setting a port both for Hosting platform and a local 3000 port
