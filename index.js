@@ -1,6 +1,9 @@
 const express = require('express');
 const app = express();
 
+
+app.use(express.json()); //enabling json middleware
+
 // app.get()
 // app.post()
 // app.put()
@@ -23,8 +26,18 @@ app.get('/api/courses', (req, res) => {
     res.send(courses);
 })
 
-// ':id' is a parameter or params, req.query is query parameter
+app.post('/api/courses', (req, res) =>{
+    const course = {
+        id: courses.length + 1, //assigning an id manually as we're not using database
+        name: req.body.name // req.body object allows you to access data in a string or JSON object from the client side
+    };
+    courses.push(course); // pushing the course object in courses array
+    res.send(course); //letting client know the id of new object after submission
+})
 
+
+
+// ':id' is a parameter or params, req.query is query parameter
 
 app.get('/api/courses/:id', (req, res) => {
     let course = courses.find(c => c.id === parseInt(req.params.id)); 
