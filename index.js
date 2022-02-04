@@ -23,10 +23,13 @@ app.get('/', (req, res) => {
     res.send("Home page")
 })
 
+// viewing results of api
 
 app.get('/api/courses', (req, res) => {
     res.send(courses);
 })
+
+// posting something on api
 
 app.post('/api/courses', (req, res) =>{
 
@@ -41,7 +44,6 @@ app.post('/api/courses', (req, res) =>{
         return;
     }
 
-
     const course = {
         id: courses.length + 1, //assigning an id manually as we're not using database
         name: req.body.name // req.body object allows you to access data in a string or JSON object from the client side
@@ -51,7 +53,7 @@ app.post('/api/courses', (req, res) =>{
 })
 
 
-
+// finding someone on api using parameter
 // ':id' is a parameter or params, req.query is query parameter
 
 app.get('/api/courses/:id', (req, res) => {
@@ -63,6 +65,33 @@ app.get('/api/courses/:id', (req, res) => {
 
     res.send(course);
     // else response with course
+})
+
+
+// updating someone on api
+
+app.put('/api/courses/:id', (req, res) => {
+
+     // looking if id exists, logic explained previously
+    let course = courses.find(c => c.id === parseInt(req.params.id));
+    if (!course) res.status(404).send('The course with given ID was not found')
+
+
+     // validating submission, previously explained in post
+    const schema ={
+        name: Joi.string().min(3).required()
+    };
+    const result = Joi.validate(req.body, schema);
+    if (result.error) // 
+    {   res.status(400).send(result.error.details[0].message); 
+        return;
+    }
+
+    //updating info
+    course.name = req.body.name;
+
+    // returning updated info
+    res.send(course);
 })
 
 
