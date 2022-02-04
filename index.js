@@ -1,6 +1,8 @@
 const express = require('express');
 const app = express();
 
+const Joi = require('joi'); //validation dependency
+
 
 app.use(express.json()); //enabling json middleware
 
@@ -27,6 +29,13 @@ app.get('/api/courses', (req, res) => {
 })
 
 app.post('/api/courses', (req, res) =>{
+
+    const schema ={
+        name: Joi.string().min(3).required()
+    };
+
+    const result = Joi.validate(req.body, schema);
+
     if (!req.body.name || req.body.name.length <2)
     {   res.status(400).send('Name is required and should be more than 3 char'); //checking if name is submitted or meets minimum length, else exit
         return;
