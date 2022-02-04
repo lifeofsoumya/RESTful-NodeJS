@@ -27,6 +27,12 @@ app.get('/api/courses', (req, res) => {
 })
 
 app.post('/api/courses', (req, res) =>{
+    if (!req.body.name || req.body.name.length <2)
+    {   res.status(400).send('Name is required and should be more than 3 char'); //checking if name is submitted or meets minimum length, else exit
+        return;
+    }
+
+
     const course = {
         id: courses.length + 1, //assigning an id manually as we're not using database
         name: req.body.name // req.body object allows you to access data in a string or JSON object from the client side
