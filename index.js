@@ -25,8 +25,16 @@ app.get('/api/courses', (req, res) => {
 
 // ':id' is a parameter or params, req.query is query parameter
 
+
 app.get('/api/courses/:id', (req, res) => {
-    res.send(req.params.id);
+    let course = courses.find(c => c.id === parseInt(req.params.id)); 
+    // compares if the courses array has the id with the requested id
+    
+    if (!course) res.status(404).send('The course with given ID was not found')
+    // if previous comparison is not true, return a status of 404 and send response text
+
+    res.send(course);
+    // else response with course
 })
 
 
